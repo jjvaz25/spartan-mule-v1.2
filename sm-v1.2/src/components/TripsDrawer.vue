@@ -9,7 +9,6 @@
   <v-navigation-drawer
     permanent
     class="grey lighten-3"
-
   >
     <v-list>
       <v-list-item>
@@ -28,10 +27,9 @@
       <v-list-item
         v-for="trip in upcomingTrips" :key="trip.id"
       >
-        
         <v-list-item-content v-if="!trip.isEditing">
           <v-list-item-title>{{ trip.title }}</v-list-item-title>
-          <v-list-item-subtitle>{{ trip.dates }}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{ displayDates(trip.dates) }}</v-list-item-subtitle>
         </v-list-item-content>
 
         <v-list-item-content v-else>
@@ -118,6 +116,9 @@ export default {
     }
   },
   methods: {
+    displayDates(dates) {
+      return `${dates[0].substr(5,5)} to ${dates[1].substr(5,5)}, ${dates[1].substr(0,4)}`
+    },
     deleteTrip(id) {
       db.collection('trips').doc(id).delete()
       const index = this.trips.findIndex(item => item.id === id)
