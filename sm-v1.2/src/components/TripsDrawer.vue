@@ -69,7 +69,7 @@
     <v-list two-line>
       <v-subheader>Upcoming</v-subheader>
       <v-list-item
-        v-for="(trip, index) in upcomingTrips" :key="index"
+        v-for="trip in upcomingTrips" :key="trip.id"
       >
         
         <v-list-item-content v-if="!trip.isEditing">
@@ -123,7 +123,7 @@
       <v-subheader>Past adventures</v-subheader>
 
       <v-list-item
-        v-for="(trip, index) in pastAdventures" :key="index"
+        v-for="trip in pastAdventures" :key="trip.id"
       >
         <v-list-item-content>
           <v-list-item-title>{{ trip.title }}</v-list-item-title>
@@ -137,6 +137,7 @@
 </template>
 
 <script>
+import db from '../fb'
 import AddTripForm from './AddTripForm'
 
 export default {
@@ -147,11 +148,11 @@ export default {
   data() {
     return {
       trips: [
-        { title: 'Galapagos', dates: ['2020-01-29', '2020-02-02'], description: 'Insert description', completed: false, isEditing: true, isActive: false },
-        { title: 'San Diego', dates: ['2020-02-02', '2020-02-15'], description: 'Insert description', completed: false, isEditing: false, isActive: false },
-        { title: 'Washington DC', dates: '2020-03-04", "2020-03-15', description: 'Insert description', completed: false, isEditing: false, isActive: false },
-        { title: 'Cape Cod', dates: '2020-01-01", "2020-01-15', description: 'Insert description', completed: true, isEditing: false, isActive: false },
-        { title: 'Boston', dates: '2010-12-01", "2019-12-26', description: 'Insert description', completed: true, isEditing: false, isActive: false },
+        // { title: 'Galapagos', dates: ['2020-01-29', '2020-02-02'], description: 'Insert description', completed: false, isEditing: true, isActive: false },
+        // { title: 'San Diego', dates: ['2020-02-02', '2020-02-15'], description: 'Insert description', completed: false, isEditing: false, isActive: false },
+        // { title: 'Washington DC', dates: '2020-03-04", "2020-03-15', description: 'Insert description', completed: false, isEditing: false, isActive: false },
+        // { title: 'Cape Cod', dates: '2020-01-01", "2020-01-15', description: 'Insert description', completed: true, isEditing: false, isActive: false },
+        // { title: 'Boston', dates: '2010-12-01", "2019-12-26', description: 'Insert description', completed: true, isEditing: false, isActive: false },
       ],
       menu: false,
       dateRange: ['2020-01-29', '2020-02-02'],
@@ -168,6 +169,22 @@ export default {
     dateRangeText () {
       return [this.dateRange[0].substr(5,5), this.dateRange[1]].join(' to ')
     }
+  },
+  created() {
+    db.collection('trips').orderBy('dates').onSnapshot(res => {
+      const changes = res.docChanges();
+      changes.forEach(change => {
+        if (change.type === 'added') {
+          this.trips.push({
+            ...change.doc.data(),
+            id: change.doc.id
+          })
+        } else if (change.type === 'modified'){
+          // this.updateDisplay(change.doc)
+          console.log('something changed')
+        }
+      })
+    })
   }
 }
 </script>
