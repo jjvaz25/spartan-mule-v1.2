@@ -77,7 +77,14 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn class="error" text @click="dialogOpen=false">Cancel</v-btn>
-          <v-btn @click="submit" class="success" text>Submit</v-btn>
+          <v-btn 
+            @click="submit" 
+            class="success" 
+            text
+            :loading="loading"
+          >
+            Submit
+          </v-btn>
         </v-card-actions>
       </v-card>
 
@@ -168,9 +175,10 @@ export default {
         v=> (v && v.length >= 1) || 'Field is required' 
       ],
       menu: false,
+      loading: false,
       title: '',
       dates: [new Date().toISOString().substr(0, 10), new Date().toISOString().substr(0, 10)],
-      description: ''
+      description: '',
     }
   },
   computed: {
@@ -181,6 +189,7 @@ export default {
   methods: {
     submit() {
       if (this.$refs.addTripForm.validate()) {
+        this.loading = true
         const newTrip = {
           title: this.title,
           dates: this.dates,
@@ -190,6 +199,7 @@ export default {
           isActive: false
         }
         db.collection('trips').add(newTrip).then(() => {
+          this.loading = false
           this.dialogOpen = false
           this.title = ''
           this.dates = [new Date().toISOString().substr(0, 10), new Date().toISOString().substr(0, 10)]
