@@ -51,8 +51,8 @@
                       range
                     >
                       <v-spacer></v-spacer>
-                      <v-btn @click="menu=false">Cancel</v-btn>
-                      <v-btn @click="$refs.menu.save(dates)">OK</v-btn>
+                      <v-btn @click="menu=false" text color="primary">Cancel</v-btn>
+                      <v-btn @click="$refs.menu.save(dates)" text color="primary">OK</v-btn>
                     </v-date-picker>
                   </v-menu>
                 </v-col>
@@ -76,7 +76,13 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="error" text @click="dialogOpen=false">Cancel</v-btn>
+          <v-btn 
+            class="warning" 
+            text 
+            @click="dialogOpen=false"
+          >
+            Cancel
+          </v-btn>
           <v-btn 
             @click="submit" 
             class="success" 

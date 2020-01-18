@@ -79,7 +79,7 @@
 
         <v-list-item-content v-else>
           <v-card>
-            <v-form ref="form">
+            <v-form class="mx-3" ref="form">
             <v-text-field label="Trip name*" :value="trip.title"></v-text-field>
             <v-menu
               v-model="menu"
@@ -105,9 +105,10 @@
             </v-menu>
           </v-form>
           <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn>Save</v-btn>
-              <v-btn><v-icon>delete</v-icon></v-btn>
+              <!-- <v-spacer></v-spacer> -->
+              <v-btn text small class="success">Save</v-btn>
+              <v-btn text small class="warning">Cancel</v-btn>
+              <v-btn text small class="error"><v-icon small>delete</v-icon></v-btn>
           </v-card-actions>
         </v-card>
         </v-list-item-content>
