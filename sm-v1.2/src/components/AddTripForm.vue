@@ -5,8 +5,8 @@
       max-width="500px"
     >
       <template v-slot:activator="{ on }">
-        <v-btn color="primary" depressed v-on="on">
-          Add Trip
+        <v-btn text v-on="on">
+          <v-icon>add</v-icon>
         </v-btn>
       </template>
       <v-card>
@@ -162,7 +162,7 @@ export default {
   name: 'AddTripForm',
   data() {
     return {
-      dialogOpen: true,
+      dialogOpen: false,
       inputRules: [
         v=> (v && v.length >= 1) || 'Field is required' 
       ],

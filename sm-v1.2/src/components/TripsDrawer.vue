@@ -54,7 +54,8 @@
         <v-list-item-content>
           <v-list-item-title class="title">My Trips</v-list-item-title>
         </v-list-item-content>
-        <v-btn text><v-icon>add</v-icon></v-btn>
+        <!-- <v-btn text><v-icon>add</v-icon></v-btn> -->
+        <add-trip-form />
       </v-list-item>
     </v-list>
 
@@ -132,9 +133,13 @@
 </template>
 
 <script>
+import AddTripForm from './AddTripForm'
 
 export default {
   name: 'TripsDrawer',
+  components: {
+    'add-trip-form': AddTripForm
+  },
   data() {
     return {
       trips: [
