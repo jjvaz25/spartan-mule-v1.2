@@ -107,14 +107,14 @@
           <v-card-actions>
               <!-- <v-spacer></v-spacer> -->
               <v-btn text small class="success">Save</v-btn>
-              <v-btn text small class="warning">Cancel</v-btn>
+              <v-btn @click="trip.isEditing = false" text small class="warning">Cancel</v-btn>
               <v-btn text small class="error"><v-icon small>delete</v-icon></v-btn>
           </v-card-actions>
         </v-card>
         </v-list-item-content>
 
 
-        <v-btn v-if="!trip.isEditing" x-small text><v-icon small>edit</v-icon></v-btn>
+        <v-btn v-if="!trip.isEditing" @click="trip.isEditing=true" x-small text><v-icon small>edit</v-icon></v-btn>
       </v-list-item>
     </v-list>
 
