@@ -204,6 +204,7 @@ export default {
           this.title = ''
           this.dates = [new Date().toISOString().substr(0, 10), new Date().toISOString().substr(0, 10)]
           this.description = ''
+          this.$emit('tripAdded')
           this.$refs.addTripForm.resetValidation()
         })
       }

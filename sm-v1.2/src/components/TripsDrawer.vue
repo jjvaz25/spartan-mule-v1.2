@@ -1,6 +1,11 @@
 <template>
 <div>
 
+  <v-snackbar v-model="addTripSnackbar" :timeout="4000" top color="success">
+      <span>Trip successfully added!</span>
+      <v-btn text color="white" @click="addTripSnackbar = false">Close</v-btn>
+  </v-snackbar>
+
   <!-- <v-navigation-drawer
     permanent
     class="grey lighten-3"
@@ -55,7 +60,7 @@
           <v-list-item-title class="title">My Trips</v-list-item-title>
         </v-list-item-content>
         <!-- <v-btn text><v-icon>add</v-icon></v-btn> -->
-        <add-trip-form />
+        <add-trip-form @tripAdded="addTripSnackbar = true"/>
       </v-list-item>
     </v-list>
 
@@ -127,9 +132,8 @@
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
+
 </div>
-
-
 </template>
 
 <script>
@@ -151,6 +155,7 @@ export default {
       ],
       menu: false,
       dateRange: ['2020-01-29', '2020-02-02'],
+      addTripSnackbar: false
     }
   },
   computed: {
