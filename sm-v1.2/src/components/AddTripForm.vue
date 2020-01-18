@@ -20,6 +20,7 @@
                     v-model="title"
                     label="Trip name*"
                     prepend-icon="map"
+                    :rules="inputRules"
                   >
                   </v-text-field>
                 </v-col>
@@ -39,6 +40,7 @@
                         label="Trip dates*"
                         prepend-icon="event"
                         readonly
+                        :rules="inputRules"
                         v-on="on"
                       >
                       </v-text-field>
@@ -161,6 +163,9 @@ export default {
   data() {
     return {
       dialogOpen: true,
+      inputRules: [
+        v=> (v && v.length >= 1) || 'Field is required' 
+      ],
       menu: false,
       title: '',
       dates: [new Date().toISOString().substr(0, 10), new Date().toISOString().substr(0, 10)],
