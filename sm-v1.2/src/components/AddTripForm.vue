@@ -77,7 +77,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn class="error" text @click="dialogOpen=false">Cancel</v-btn>
-          <v-btn class="success" text>Submit</v-btn>
+          <v-btn @click="submit" class="success" text>Submit</v-btn>
         </v-card-actions>
       </v-card>
 
@@ -178,25 +178,19 @@ export default {
     }
   },
   methods: {
-    // submit() {
-    //   if (this.$refs.form.validate()) {
-    //     this.loading = true;
-    //     const item = {
-    //       title: this.title,
-    //       creator: this.creator,
-    //       category: this.category,
-    //       completed: this.completed,
-    //       rating: this.rating,
-    //       time: new Date()
-    //     }
-    //     db.collection('library').add(item).then(() => {
-    //       this.loading = false
-    //       this.dialogOpen = false
-    //       this.$emit('itemAdded')
-    //       this.$refs.form.reset()
-    //     })
-    //   }
-    // },
+    submit() {
+      if (this.$refs.addTripForm.validate()) {
+        const newTrip = {
+          title: this.title,
+          dates: this.dates,
+          description: this.description,
+          completed: false,
+          isEditing: false,
+          isActive: false
+        }
+        console.log(newTrip)
+      }
+    },
   }
 }
 </script>

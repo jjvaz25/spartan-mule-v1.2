@@ -143,11 +143,11 @@ export default {
   data() {
     return {
       trips: [
-        { title: 'Galapagos', dates: ['2020-01-29", "2020-02-02'], description: 'Insert description', completed: false, isEditing: true },
-        { title: 'San Diego', dates: '2020-02-02", "2020-02-15', description: 'Insert description', completed: false },
-        { title: 'Washington DC', dates: '2020-03-04", "2020-03-15', description: 'Insert description', completed: false },
-        { title: 'Cape Cod', dates: '2020-01-01", "2020-01-15', description: 'Insert description', completed: true },
-        { title: 'Boston', dates: '2010-12-01", "2019-12-26', description: 'Insert description', completed: true },
+        { title: 'Galapagos', dates: ['2020-01-29", "2020-02-02'], description: 'Insert description', completed: false, isEditing: true, isActive: false },
+        { title: 'San Diego', dates: '2020-02-02", "2020-02-15', description: 'Insert description', completed: false, isEditing: false, isActive: false },
+        { title: 'Washington DC', dates: '2020-03-04", "2020-03-15', description: 'Insert description', completed: false, isEditing: false, isActive: false },
+        { title: 'Cape Cod', dates: '2020-01-01", "2020-01-15', description: 'Insert description', completed: true, isEditing: false, isActive: false },
+        { title: 'Boston', dates: '2010-12-01", "2019-12-26', description: 'Insert description', completed: true, isEditing: false, isActive: false },
       ],
       menu: false,
       dateRange: ['2020-01-29', '2020-02-02'],
