@@ -157,6 +157,7 @@
 </template>
 
 <script>
+import db from '../fb'
 
 export default {
   name: 'AddTripForm',
@@ -188,7 +189,13 @@ export default {
           isEditing: false,
           isActive: false
         }
-        console.log(newTrip)
+        db.collection('trips').add(newTrip).then(() => {
+          this.dialogOpen = false
+          this.title = ''
+          this.dates = [new Date().toISOString().substr(0, 10), new Date().toISOString().substr(0, 10)]
+          this.description = ''
+          this.$refs.addTripForm.resetValidation()
+        })
       }
     },
   }
