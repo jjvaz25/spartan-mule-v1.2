@@ -16,7 +16,12 @@
             <v-container>
               <v-row>
                 <v-col cols="12" sm="6">
-                  <v-text-field label="Trip name*"></v-text-field>
+                  <v-text-field 
+                    v-model="title"
+                    label="Trip name*"
+                    prepend-icon="map"
+                  >
+                  </v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-menu
@@ -53,8 +58,12 @@
               <v-row>
                 <v-col>
                   <v-textarea
-                    label="Trip description"
-                    value="A trip to insert place from insert dates"
+                    v-model="description"
+                    label="Include some miscellaneous notes about your trip!"
+                    outlined
+                    auto-grow
+                    solo
+                    flat
                   >
                   </v-textarea>
                 </v-col>
@@ -153,7 +162,9 @@ export default {
     return {
       dialogOpen: true,
       menu: false,
-      dates: [new Date().toISOString().substr(0, 10), new Date().toISOString().substr(0, 10)]
+      title: '',
+      dates: [new Date().toISOString().substr(0, 10), new Date().toISOString().substr(0, 10)],
+      description: ''
     }
   },
   computed: {
