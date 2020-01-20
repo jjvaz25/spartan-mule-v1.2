@@ -25,7 +25,7 @@
     <v-list two-line>
       <v-subheader>Upcoming</v-subheader>
       <v-list-item
-        v-for="trip in upcomingTrips" :key="trip.id"
+        v-for="(trip, index) in upcomingTrips" :key="trip.id"
       >
         <v-list-item-content v-if="!trip.isEditing">
           <v-list-item-title>{{ trip.title }}</v-list-item-title>
@@ -35,27 +35,38 @@
         <v-list-item-content v-else>
           <v-card>
             <v-form class="mx-3" ref="form">
-            <v-text-field label="Trip name*" :value="trip.title"></v-text-field>
+            <v-text-field 
+              label="Trip name*" 
+              :value="trip.title"
+              :rules="inputRules"
+            ></v-text-field>
             <v-menu
+              ref="menu"
               v-model="menu"
               :close-on-content-click="false"
+              :return-value.sync="datesABC"
+              transition="scale-transition"
+              offset-y
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-on="on"
                   v-model="dateRangeText"
                   label="Trip dates*"
+                  readonly
+                  :rules="inputRules"
+                  v-on="on"
                 >
                 </v-text-field>
               </template>
               <v-date-picker
-                v-model="dateRange"
-                range
                 no-title
+                v-model="datesABC"
+                range
               >
                 <v-spacer></v-spacer>
-                <v-btn @click="menu = false">Cancel</v-btn>
-                <v-btn>OK</v-btn>
+                <v-btn @click="menu=false" text color="primary">Cancel</v-btn>
+                <v-btn @click="$refs.menu[index].save(datesABC)" text color="primary">OK</v-btn>
+                <!-- <v-btn @click="$refs.menu[trip.id].save(datesABC)" text color="primary">OK</v-btn> -->
               </v-date-picker>
             </v-menu>
           </v-form>
@@ -103,21 +114,21 @@ export default {
   },
   data() {
     return {
-      trips: [
-        // { title: 'Galapagos', dates: ['2020-01-29', '2020-02-02'], description: 'Insert description', completed: false, isEditing: true, isActive: false },
-        // { title: 'San Diego', dates: ['2020-02-02', '2020-02-15'], description: 'Insert description', completed: false, isEditing: false, isActive: false },
-        // { title: 'Washington DC', dates: '2020-03-04", "2020-03-15', description: 'Insert description', completed: false, isEditing: false, isActive: false },
-        // { title: 'Cape Cod', dates: '2020-01-01", "2020-01-15', description: 'Insert description', completed: true, isEditing: false, isActive: false },
-        // { title: 'Boston', dates: '2010-12-01", "2019-12-26', description: 'Insert description', completed: true, isEditing: false, isActive: false },
+      trips: [],
+      inputRules: [
+        v=> (v && v.length >= 1) || 'Field is required' 
       ],
       menu: false,
-      dateRange: ['2020-01-29', '2020-02-02'],
-      addTripSnackbar: false
+      addTripSnackbar: false,
+      datesABC: [new Date().toISOString().substr(0, 10), new Date().toISOString().substr(0, 10)],
     }
   },
   methods: {
     displayDates(dates) {
       return `${dates[0].substr(5,5)} to ${dates[1].substr(5,5)}, ${dates[1].substr(0,4)}`
+    },
+    getDates(dates) {
+      return dates
     },
     deleteTrip(id) {
       db.collection('trips').doc(id).delete()
@@ -133,8 +144,8 @@ export default {
     pastAdventures() {
       return this.trips.filter(trip => trip.completed);
     },
-    dateRangeText () {
-      return [this.dateRange[0].substr(5,5), this.dateRange[1]].join(' to ')
+    dateRangeText() {
+      return [this.datesABC[0].substr(5,5), this.datesABC[1]].join(' to ')
     }
   },
   created() {
