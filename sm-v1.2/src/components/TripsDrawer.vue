@@ -25,7 +25,7 @@
     <v-list two-line>
       <v-subheader>Upcoming</v-subheader>
       <v-list-item
-        v-for="(trip, index) in upcomingTrips" :key="trip.id"
+        v-for="trip in upcomingTrips" :key="trip.id"
       >
         <v-list-item-content v-if="!trip.isEditing">
           <v-list-item-title>{{ trip.title }}</v-list-item-title>
@@ -33,50 +33,53 @@
         </v-list-item-content>
 
         <v-list-item-content v-else>
-          <v-card>
+          <edit-trip-form 
+            :tripInfo="{ title: trip.title, dates: trip.dates, description: trip.description, completed: trip.completed, isEditing: trip.isEditing, isActive: trip.isActive, id: trip.id }"
+            @cancelEdits="trip.isEditing=false"
+          />
+          <!-- <v-card>
             <v-form class="mx-3" ref="form">
-            <v-text-field 
-              label="Trip name*" 
-              :value="trip.title"
-              :rules="inputRules"
-            ></v-text-field>
-            <v-menu
-              ref="menu"
-              v-model="menu"
-              :close-on-content-click="false"
-              :return-value.sync="datesABC"
-              transition="scale-transition"
-              offset-y
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="dateRangeText"
-                  label="Trip dates*"
-                  readonly
-                  :rules="inputRules"
-                  v-on="on"
-                >
-                </v-text-field>
-              </template>
-              <v-date-picker
-                no-title
-                v-model="datesABC"
-                range
+              <v-text-field 
+                label="Trip name*" 
+                :value="trip.title"
+                :rules="inputRules"
+              ></v-text-field>
+              <v-menu
+                ref="menu"
+                v-model="menu"
+                :close-on-content-click="false"
+                :return-value.sync="trip.dates"
+                transition="scale-transition"
+                offset-y
               >
-                <v-spacer></v-spacer>
-                <v-btn @click="menu=false" text color="primary">Cancel</v-btn>
-                <v-btn @click="$refs.menu[index].save(datesABC)" text color="primary">OK</v-btn>
-                <!-- <v-btn @click="$refs.menu[trip.id].save(datesABC)" text color="primary">OK</v-btn> -->
-              </v-date-picker>
-            </v-menu>
-          </v-form>
-          <v-card-actions>
-              <!-- <v-spacer></v-spacer> -->
-              <v-btn text small class="success">Save</v-btn>
-              <v-btn @click="trip.isEditing = false" text small class="warning">Cancel</v-btn>
-              <v-btn @click="deleteTrip(trip.id)" text small class="error"><v-icon small>delete</v-icon></v-btn>
-          </v-card-actions>
-        </v-card>
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    :value="trip.dates"
+                    :v-model="getDates(trip.dates)"
+                    label="Trip dates*"
+                    readonly
+                    :rules="inputRules"
+                    v-on="on"
+                  >
+                  </v-text-field>
+                </template>
+                <v-date-picker
+                  no-title
+                  v-model="trip.dates"
+                  range
+                >
+                  <v-spacer></v-spacer>
+                  <v-btn @click="menu=false" text color="primary">Cancel</v-btn>
+                  <v-btn @click="$refs.menu[index].save(['putting in random strings', 'my newest date is here'])" text color="primary">OK</v-btn>
+                </v-date-picker>
+              </v-menu>
+            </v-form>
+            <v-card-actions>
+                <v-btn text small class="success">Save</v-btn>
+                <v-btn @click="trip.isEditing = false" text small class="warning">Cancel</v-btn>
+                <v-btn @click="deleteTrip(trip.id)" text small class="error"><v-icon small>delete</v-icon></v-btn>
+            </v-card-actions>
+          </v-card> -->
         </v-list-item-content>
 
 
@@ -106,21 +109,23 @@
 <script>
 import db from '../fb'
 import AddTripForm from './AddTripForm'
+import EditTtripForm from './EditTripForm'
 
 export default {
   name: 'TripsDrawer',
   components: {
-    'add-trip-form': AddTripForm
+    'add-trip-form': AddTripForm,
+    'edit-trip-form': EditTtripForm
   },
   data() {
     return {
       trips: [],
-      inputRules: [
-        v=> (v && v.length >= 1) || 'Field is required' 
-      ],
+      // inputRules: [
+      //   v=> (v && v.length >= 1) || 'Field is required' 
+      // ],
       menu: false,
       addTripSnackbar: false,
-      datesABC: [new Date().toISOString().substr(0, 10), new Date().toISOString().substr(0, 10)],
+      date: [new Date().toISOString().substr(0, 10), new Date().toISOString().substr(0, 10)]
     }
   },
   methods: {
@@ -135,7 +140,11 @@ export default {
       const index = this.trips.findIndex(item => item.id === id)
       this.trips.splice(index, 1)
       // this.deleteTripSnackbar = true
-    }
+    },
+    // clearEdits(trip) {
+    //   trip.isEditing = false
+
+    // }
   },
   computed: {
     upcomingTrips() {
