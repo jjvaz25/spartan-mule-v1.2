@@ -5,6 +5,10 @@
       <span>Trip successfully added!</span>
       <v-btn text color="white" @click="addTripSnackbar = false">Close</v-btn>
   </v-snackbar>
+  <v-snackbar v-model="deleteTripSnackbar" :timeout="4000" top color="success">
+      <span>Trip successfully deleted!</span>
+      <v-btn text color="white" @click="deleteTripSnackbar = false">Close</v-btn>
+  </v-snackbar>
 
   <v-navigation-drawer
     permanent
@@ -36,6 +40,7 @@
           <edit-trip-form 
             :tripInfo="{ title: trip.title, dates: trip.dates, description: trip.description, completed: trip.completed, isEditing: trip.isEditing, isActive: trip.isActive, id: trip.id }"
             @cancelEdits="trip.isEditing=false"
+            @deleteTrip="deleteTrip"
           />
           <!-- <v-card>
             <v-form class="mx-3" ref="form">
@@ -125,6 +130,7 @@ export default {
       // ],
       menu: false,
       addTripSnackbar: false,
+      deleteTripSnackbar: false,
       date: [new Date().toISOString().substr(0, 10), new Date().toISOString().substr(0, 10)]
     }
   },
@@ -139,12 +145,8 @@ export default {
       db.collection('trips').doc(id).delete()
       const index = this.trips.findIndex(item => item.id === id)
       this.trips.splice(index, 1)
-      // this.deleteTripSnackbar = true
+      this.deleteTripSnackbar = true
     },
-    // clearEdits(trip) {
-    //   trip.isEditing = false
-
-    // }
   },
   computed: {
     upcomingTrips() {

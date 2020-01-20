@@ -36,12 +36,48 @@
     <v-card-actions>
         <v-btn text small class="success">Save</v-btn>
         <v-btn 
-          text 
-          small 
-          class="warning"
+          text small class="warning"
           @click="$emit('cancelEdits')"
         >Cancel</v-btn>
-        <v-btn text small class="error"><v-icon small>delete</v-icon></v-btn>
+
+        <v-dialog
+          v-model="dialogOpen"
+          max-width="300px"
+        >
+          <template v-slot:activator="{ on }">
+            <v-btn text small class="error ml-2" v-on="on">
+              <v-icon small>delete</v-icon>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title class="text-center text-wrap">Are you sure you want to delete this trip?</v-card-title>
+            <v-card-text>
+              <v-form ref="deleteConfirmation">
+              </v-form>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn 
+                text class="error"
+                @click="dialogOpen = false"
+              >No</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn 
+                text class="success"
+                @click="$emit('deleteTrip', id)"
+              >Yes</v-btn> 
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+
+
+ 
+        <!-- <v-btn 
+          text small class="error"
+          @click="deleteTrip"
+        ><v-icon small>delete</v-icon></v-btn> -->
     </v-card-actions>
   </v-card>
 </template>
@@ -56,17 +92,13 @@ export default {
   data() {
     return {
       menu: false,
+      dialogOpen: false,
       inputRules: [
         v=> (v && v.length >= 1) || 'Field is required' 
       ],
       title: this.tripInfo.title,
       dates: this.tripInfo.dates,
       id: this.tripInfo.id,
-    }
-  },
-  methods: {
-    cancelEdits() {
-      // this.$emit('editsCanceled')
     }
   },
   computed: {
@@ -82,3 +114,9 @@ export default {
 
 }
 </script>
+
+<style scoped>
+.v-card__text, .v-card__title {
+  word-break: normal; /* maybe !important  */
+}
+</style>
