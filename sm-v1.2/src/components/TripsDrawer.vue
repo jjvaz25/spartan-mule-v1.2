@@ -147,6 +147,16 @@ export default {
       this.trips.splice(index, 1)
       this.deleteTripSnackbar = true
     },
+    updateDisplay(doc) {
+
+      const index = this.trips.findIndex(trip => trip.id === doc.id)
+      this.trips[index].title = doc.data().title
+      this.trips[index].dates = doc.data().dates
+      this.trips[index].description = doc.data().description
+      this.trips[index].completed = doc.data().completed
+      this.trips[index].isActive = doc.data().isActive
+      this.trips[index].isEditing = doc.data().isEditing
+    }
   },
   computed: {
     upcomingTrips() {
@@ -169,8 +179,7 @@ export default {
             id: change.doc.id
           })
         } else if (change.type === 'modified'){
-          // this.updateDisplay(change.doc)
-          console.log('something changed')
+          this.updateDisplay(change.doc)
         }
       })
     })

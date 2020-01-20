@@ -1,9 +1,10 @@
 <template>
   <v-card>
-    <v-form class="mx-3" ref="form">
+    <v-form class="mx-3" ref="editForm">
       <v-text-field 
         label="Trip name*" 
         v-model="title"
+        :rules="inputRules"
       ></v-text-field>
       <v-menu
         ref="menu"
@@ -19,6 +20,7 @@
             v-model="dateRangeText"
             readonly
             v-on="on"
+            :rules="inputRules"
           >
           </v-text-field>
         </template>
@@ -34,7 +36,11 @@
       </v-menu>
     </v-form>
     <v-card-actions>
-        <v-btn text small class="success">Save</v-btn>
+        <v-btn 
+          text small class="success"
+          :loading="loading"
+          @click="submit"
+        >Save</v-btn>
         <v-btn 
           text small class="warning"
           @click="$emit('cancelEdits')"
@@ -83,6 +89,7 @@
 </template>
 
 <script>
+import db from '../fb'
 
 export default {
   name: 'EditTripForm',
@@ -93,12 +100,42 @@ export default {
     return {
       menu: false,
       dialogOpen: false,
+      loading: false,
       inputRules: [
         v=> (v && v.length >= 1) || 'Field is required' 
       ],
       title: this.tripInfo.title,
       dates: this.tripInfo.dates,
+      description: this.tripInfo.description,
+      completed: this.tripInfo.completed,
+      isActive: this.tripInfo.isActive,
+      isEditing: this.tripInfo.isEditing,
       id: this.tripInfo.id,
+    }
+  },
+  methods: {
+    submit() {
+      if (this.$refs.editForm.validate())
+      this.loading = true
+      const trip = {
+        title: this.title,
+        dates: this.dates,
+        description: this.description,
+        completed: this.completed,
+        isActive: this.isActive,
+        isEditing: false,
+        id: this.id
+      }
+      db.collection('trips').doc(trip.id).update({
+        title: trip.title,
+        dates: trip.dates,
+        description: trip.description,
+        completed: trip.completed,
+        isActive: trip.isActive,
+        isEditing: trip.isEditing
+      }).then(() => {
+        this.loading = false
+      })
     }
   },
   computed: {
@@ -106,11 +143,6 @@ export default {
       return [this.dates[0].substr(5,5), this.dates[1]].join(' to ')
     }
   },
-
-  // description: this.tripInfo.description,
-  // completed: this.tripInfo.completed,
-  // isEditing: this.tripInfo.isEditing,
-  // isActive: this.tripInfo.isActive
 
 }
 </script>
