@@ -76,14 +76,6 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-
-
-
- 
-        <!-- <v-btn 
-          text small class="error"
-          @click="deleteTrip"
-        ><v-icon small>delete</v-icon></v-btn> -->
     </v-card-actions>
   </v-card>
 </template>

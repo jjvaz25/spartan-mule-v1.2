@@ -19,7 +19,6 @@
         <v-list-item-content>
           <v-list-item-title class="title">My Trips</v-list-item-title>
         </v-list-item-content>
-        <!-- <v-btn text><v-icon>add</v-icon></v-btn> -->
         <add-trip-form @tripAdded="addTripSnackbar = true"/>
       </v-list-item>
     </v-list>
@@ -42,49 +41,6 @@
             @cancelEdits="trip.isEditing=false"
             @deleteTrip="deleteTrip"
           />
-          <!-- <v-card>
-            <v-form class="mx-3" ref="form">
-              <v-text-field 
-                label="Trip name*" 
-                :value="trip.title"
-                :rules="inputRules"
-              ></v-text-field>
-              <v-menu
-                ref="menu"
-                v-model="menu"
-                :close-on-content-click="false"
-                :return-value.sync="trip.dates"
-                transition="scale-transition"
-                offset-y
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    :value="trip.dates"
-                    :v-model="getDates(trip.dates)"
-                    label="Trip dates*"
-                    readonly
-                    :rules="inputRules"
-                    v-on="on"
-                  >
-                  </v-text-field>
-                </template>
-                <v-date-picker
-                  no-title
-                  v-model="trip.dates"
-                  range
-                >
-                  <v-spacer></v-spacer>
-                  <v-btn @click="menu=false" text color="primary">Cancel</v-btn>
-                  <v-btn @click="$refs.menu[index].save(['putting in random strings', 'my newest date is here'])" text color="primary">OK</v-btn>
-                </v-date-picker>
-              </v-menu>
-            </v-form>
-            <v-card-actions>
-                <v-btn text small class="success">Save</v-btn>
-                <v-btn @click="trip.isEditing = false" text small class="warning">Cancel</v-btn>
-                <v-btn @click="deleteTrip(trip.id)" text small class="error"><v-icon small>delete</v-icon></v-btn>
-            </v-card-actions>
-          </v-card> -->
         </v-list-item-content>
 
 
@@ -125,9 +81,6 @@ export default {
   data() {
     return {
       trips: [],
-      // inputRules: [
-      //   v=> (v && v.length >= 1) || 'Field is required' 
-      // ],
       menu: false,
       addTripSnackbar: false,
       deleteTripSnackbar: false,
