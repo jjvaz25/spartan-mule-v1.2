@@ -13,6 +13,7 @@
   <v-navigation-drawer
     permanent
     class="grey lighten-3"
+    height="100%"
   >
     <v-list>
       <v-list-item>
@@ -42,24 +43,45 @@
             @deleteTrip="deleteTrip"
           />
         </v-list-item-content>
-
-
         <v-btn v-if="!trip.isEditing" @click="trip.isEditing=true" x-small text><v-icon small>edit</v-icon></v-btn>
       </v-list-item>
     </v-list>
 
     <v-divider></v-divider>
-    
+
     <v-list two-line>
       <v-subheader>Past adventures</v-subheader>
-
+      <div class="subtitle-2">
+        <div 
+          class="ml-2"
+          @click="showPastTrips = !showPastTrips"
+        >
+          <v-btn x-small text fab>
+          <v-icon v-if="!showPastTrips">chevron_right</v-icon>
+          <v-icon v-else>expand_more</v-icon>
+          </v-btn>
+          <span>Show previous trips</span>  
+        </div>
+      </div>
+    </v-list>
+    
+    <v-list v-if="showPastTrips">
       <v-list-item
         v-for="trip in pastAdventures" :key="trip.id"
       >
-        <v-list-item-content>
+        <v-list-item-content v-if="!trip.isEditing">
           <v-list-item-title>{{ trip.title }}</v-list-item-title>
-          <v-list-item-subtitle>{{ trip.dates }}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{ displayDates(trip.dates) }}</v-list-item-subtitle>
         </v-list-item-content>
+
+        <v-list-item-content v-else>
+          <edit-trip-form 
+            :tripInfo="{ title: trip.title, dates: trip.dates, description: trip.description, completed: trip.completed, isEditing: trip.isEditing, isActive: trip.isActive, id: trip.id }"
+            @cancelEdits="trip.isEditing=false"
+            @deleteTrip="deleteTrip"
+          />
+        </v-list-item-content>
+        <v-btn v-if="!trip.isEditing" @click="trip.isEditing=true" x-small text><v-icon small>edit</v-icon></v-btn>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
@@ -84,7 +106,8 @@ export default {
       menu: false,
       addTripSnackbar: false,
       deleteTripSnackbar: false,
-      date: [new Date().toISOString().substr(0, 10), new Date().toISOString().substr(0, 10)]
+      date: [new Date().toISOString().substr(0, 10), new Date().toISOString().substr(0, 10)],
+      showPastTrips: false
     }
   },
   methods: {
